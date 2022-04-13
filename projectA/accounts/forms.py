@@ -56,7 +56,7 @@ class UserRegistrationForm(forms.Form):
             raise ValidationError('this name is already exists.')
         return name
 
-        
+
 
 class VerifyCodeForm(forms.Form):
     code = forms.IntegerField()
