@@ -34,3 +34,29 @@ class UserChangeForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('full_name','phone_number','password','last_login')
+
+
+
+class UserRegistrationForm(forms.Form):
+    phone_number = forms.CharField(max_length=11)
+    full_name = forms.CharField(label='full name')
+    password = forms.CharField(widget=forms.PasswordInput)
+
+    def clean_phone_number(self):
+        phone = self.cleaned_data['phone_number']
+        user = User.objects.filter(phone_number=phone).exists()
+        if user:
+            raise ValidationError('this phone number is exist.')
+        return phone
+
+    def clean_full_name(self):
+        name = self.cleaned_data['full_name']
+        user = User.objects.filter(full_name=name).exists()
+        if user:
+            raise ValidationError('this name is already exists.')
+        return name
+
+        
+
+class VerifyCodeForm(forms.Form):
+    code = forms.IntegerField()
